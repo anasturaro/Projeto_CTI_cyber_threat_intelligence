@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-end align-items-center mb-3 p-2 rounded bg-black border border-secondary">
+
+    <span class="me-3 fw-semibold text-white">⚡ Status API</span>
+
+    <span class="badge rounded-pill px-3 py-2 me-2
+        {% if status.abuseipdb %}bg-success{% else %}bg-danger{% endif %}">
+        <i class="bi bi-shield-check me-1"></i> AbuseIPDB
+    </span>
+
+    <span class="badge rounded-pill px-3 py-2 me-2
+        {% if status.vt %}bg-success{% else %}bg-danger{% endif %}">
+        <i class="bi bi-virus me-1"></i> VirusTotal
+    </span>
+
+    <span class="badge rounded-pill px-3 py-2
+        {% if status.shodan %}bg-success{% else %}bg-danger{% endif %}">
+        <i class="bi bi-hdd-network me-1"></i> Shodan
+    </span>
+
+</div>
+<h1>🔍 Analisar IP</h1>
+
+<form method="POST" class="mb-4">
+    <input type="text" name="ip" class="form-control" placeholder="Digite um IP" required>
+    <button class="btn btn-primary mt-2">Analisar</button>
+</form>
+<div class="alert border border-warning bg-dark text-warning mt-4">
+    <h5>⚠️ Aviso Legal e Ético</h5>
+    <p>
+        Esta plataforma é destinada exclusivamente para fins educacionais e de pesquisa em Cyber Threat Intelligence (CTI).
+    </p>
+    <p>
+        As informações apresentadas são provenientes de fontes públicas e APIs de terceiros, como Shodan, VirusTotal e AbuseIPDB.
+    </p>
+    <p>
+        O uso indevido destas informações para atividades ilegais, como ataques ou exploração não autorizada de sistemas, é estritamente proibido.
+    </p>
+    <p>
+        O usuário é totalmente responsável pelo uso desta ferramenta.
+    </p>
+</div>
+
+{% endblock %}

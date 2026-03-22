@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">🔍 Detalhes da Análise</h2>
+
+    <div class="row mb-4 text-center">
+
+        <h2>Risco</h2>
+
+        <h1>
+            {% if data.risco == "Alto" %}
+                <span class="badge bg-danger">ALTO</span>
+            {% elif data.risco == "Médio" %}
+                <span class="badge bg-warning text-dark">MÉDIO</span>
+            {% else %}
+                <span class="badge bg-success">BAIXO</span>
+            {% endif %}
+        </h1>
+
+        <p><strong>Detecções VirusTotal:</strong> {{ data.vt_malicious }}</p>
+
+        <p>
+            🌍 {{ geo.country }}
+        </p>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-md-6">
+            <div class="card bg-secondary p-3 h-100">
+
+                <h4>📌 Análise Completa</h4>
+
+                <p><strong>IP:</strong> {{ data.ip }}</p>
+                <p><strong>AbuseIPDB Score:</strong> {{ data.abuseipdb_score }}</p>
+                <p><strong>VirusTotal:</strong> {{ data.vt_malicious }}</p>
+
+                <p><strong>Portas:</strong>
+                    {% if data.ports %}
+                        {% for port in data.ports %}
+                            <span class="badge bg-info">{{ port }}</span>
+                        {% endfor %}
+                    {% else %}
+                        Nenhuma detectada
+                    {% endif %}
+                </p>
+
+                <p><strong>Vulnerabilidades:</strong>
+                    {% if data.vulns %}
+                        {% for cve in data.vulns %}
+                            <span class="badge bg-danger">{{ cve }}</span>
+                        {% endfor %}
+                    {% else %}
+                        Nenhuma detectada
+                    {% endif %}
+                </p>
+                <p><strong>Risco Final:</strong> {{ data.risco }}</p>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-secondary p-3 h-100">
+
+                <h4>🌍 Localização</h4>
+                <div id="map" style="height: 400px; border-radius: 10px;"></div>
+
+                <p><strong>País:</strong> {{ geo.country }}</p>
+                <p><strong>Cidade:</strong> {{ geo.city }}</p>
+                <p><strong>ISP:</strong> {{ geo.isp }}</p>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    var map = L.map('map').setView([{{ geo.lat }}, {{ geo.lon }}], 5);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap & CartoDB',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    L.marker([{{ geo.lat }}, {{ geo.lon }}])
+        .addTo(map)
+        .bindPopup("IP localizado aqui")
+        .openPopup();
+</script>
+
+{% endblock %}
